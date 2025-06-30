@@ -9,47 +9,57 @@ export default function Main() {
   // ! เมื่อ มันหาไม่เจอจะขึ้นใน input หรือ console [object Object] แก้โดยใส่ ชื่อ state ของ object ตามด้วย เข้าถึงค่าภายในของมั้น เช่น
   // ! inputvalue.namelist
   const [inputvalue, setinputvalue] = useState({
+    id: Date.now(),
     namelist: "",
     checked: false,
     time: new Date().toLocaleString(),
+    color: false,
   });
+  const [Erorr, setErorr] = useState(false);
   // * เป็นฟั่งชั่นเมื่อมีการเปลี่ยนแปลงก็จะเก็บ e หรือ event โดยสร้างตัวแปลเก็บชื่อ name,value เป็น object ที่ส่งมาตามทีี่ตั้งชื่อ เช่น
   // * เป็น name: "namelist"
   // * การใช้ prev เป็นการดึงค่าอันเก่ามาด้วย เมื่อมีการเปลี่ยนแปลงก็จะแทนที่ค่าตัวเก่า
   const handleonchange = (e) => {
     const { name, value } = e.target;
     setinputvalue((prev) => ({ ...prev, [name]: value }));
-    console.log([inputvalue]);
   };
   // * เมื่อมีการกด submit ของ form รับ event มาแล้วเรียกใช้ preventDefault() เพื่อให้หน้าเว็บโหลด
   // * จากนั้นดึงค่าจาก list อันเก่ามาด้วยแทนที่ prev เมื่อกดแล้วจะแทนที่ตัวเก่าด้วยตัวใหม่ของ inputvalue
   // * จากนั้นล้างค่าที่เป็น inputvalue ให้หมด
   const submitform = (e) => {
-    try {
+    if (inputvalue.namelist) {
       e.preventDefault();
       setlist((prev) => [...prev, inputvalue]);
       setinputvalue({
+        id: Date.now(),
         namelist: "",
         checkend: false,
         time: new Date().toLocaleString(),
+        color: false,
       });
-    } catch (error) {
-      console.log(error);
-    }
-    console.log(list);
-  };
-  const checkbox = (e, index, checked) => {
-    const check = e.target.checked;
-    if (check) {
-      console.log("checked");
-      console.log(index);
-      if (index == index) {
-      } else {
-        console.log("ผิด");
-      }
+      setErorr(false);
     } else {
-      console.log("unchecked");
+      e.preventDefault();
+      setErorr(true);
     }
+  };
+  // * แก้ไข้ให้มันเลือก checked ใน objectด้วย
+  const [selectid, setselectid] = useState([]);
+  const handleoncheckbox = (id) => {
+    if (id) {
+      setselectid((prev) => ({ ...prev, [id]: !prev[id] }));
+    }
+  };
+  const handlecolorchecklsit = () => {
+    const updatecolor = list.map((item) => {
+      if (selectid[item.id]) {
+        return { ...item, color: !item.color };
+      }
+      return item;
+    });
+
+    setlist(updatecolor);
+    console.log(updatecolor);
   };
   return (
     <main className=" p-2 bg-gray-400 w-full h-[90vh]">
@@ -71,6 +81,9 @@ export default function Main() {
               >
                 Add
               </button>
+              <div className="text-red-500 mt-2">
+                {Erorr ? "ใส่ข้อมูลด้วยครับ" : ""}
+              </div>
             </form>
           </section>
           {/* <Itemlist list={list} checkend={checkend} setcheckend={setcheckend} /> */}
@@ -79,19 +92,33 @@ export default function Main() {
               return (
                 <div
                   key={index}
-                  className="flex justify-between items-center bg-cyan-500 p-2 rounded-2xl"
+                  className={
+                    item.color
+                      ? "flex justify-between items-center bg-gray-500 p-2 rounded-2xl"
+                      : "flex justify-between items-center bg-cyan-500 p-2 rounded-2xl"
+                  }
                 >
                   <div className=" ml-2 flex  ">
                     <div className="mr-2 flex items-center">
                       <input
                         className=" w-4 h-4 rounded-md mr-2 checked:bg-amber-200"
                         type="checkbox"
-                        onClick={(e) => checkbox(e, index + 1, item.checked)}
+                        onChange={() => {
+                          handleoncheckbox(item.id), handlecolorchecklsit();
+                        }}
+                        checked={selectid[item.id] || false}
                       />
+
                       {index + 1}
                     </div>
                     <div key={item.id}>
-                      <h1 className="text-lg"> {item.namelist}</h1>
+                      <h1
+                        className={
+                          item.color ? "text-lg  bg-red-400" : "text-lg "
+                        }
+                      >
+                        {item.namelist}
+                      </h1>
                       <div className="">
                         <p className=" text-[12px] text-white ">{item.time}</p>
                       </div>
