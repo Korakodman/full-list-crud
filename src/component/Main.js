@@ -1,10 +1,12 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import Itemlist from "./Itemlist";
 export default function Main() {
   // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
+
   const [list, setlist] = useState([]);
+
   // *เป็น state ไว้เก็บการเคลื่อนไวของ input ต้องสร้าง name:value ไว้ด้วยไม่งั้นมันจะหาไม่เจอว่าจะแสดงเป็นอะไร
   // ! เมื่อ มันหาไม่เจอจะขึ้นใน input หรือ console [object Object] แก้โดยใส่ ชื่อ state ของ object ตามด้วย เข้าถึงค่าภายในของมั้น เช่น
   // ! inputvalue.namelist
@@ -16,16 +18,25 @@ export default function Main() {
     color: false,
   });
   const [Erorr, setErorr] = useState(false);
+
   // * เป็นฟั่งชั่นเมื่อมีการเปลี่ยนแปลงก็จะเก็บ e หรือ event โดยสร้างตัวแปลเก็บชื่อ name,value เป็น object ที่ส่งมาตามทีี่ตั้งชื่อ เช่น
   // * เป็น name: "namelist"
   // * การใช้ prev เป็นการดึงค่าอันเก่ามาด้วย เมื่อมีการเปลี่ยนแปลงก็จะแทนที่ค่าตัวเก่า
-  const handleonchange = (e) => {
+  const handleonchange = (e, item) => {
     const { name, value } = e.target;
     setinputvalue((prev) => ({ ...prev, [name]: value }));
+    console.log(
+      selectid.map((item) => {
+        let id = [];
+        id = item.id;
+        console.log(id);
+      })
+    );
   };
   // * เมื่อมีการกด submit ของ form รับ event มาแล้วเรียกใช้ preventDefault() เพื่อให้หน้าเว็บโหลด
   // * จากนั้นดึงค่าจาก list อันเก่ามาด้วยแทนที่ prev เมื่อกดแล้วจะแทนที่ตัวเก่าด้วยตัวใหม่ของ inputvalue
   // * จากนั้นล้างค่าที่เป็น inputvalue ให้หมด
+
   const submitform = (e) => {
     if (inputvalue.namelist) {
       e.preventDefault();
@@ -37,6 +48,7 @@ export default function Main() {
         time: new Date().toLocaleString(),
         color: false,
       });
+      setselectid((prev) => [...prev, inputvalue]);
       setErorr(false);
     } else {
       e.preventDefault();
@@ -45,22 +57,12 @@ export default function Main() {
   };
   // * แก้ไข้ให้มันเลือก checked ใน objectด้วย
   const [selectid, setselectid] = useState([]);
-  const handleoncheckbox = (id) => {
-    if (id) {
-      setselectid((prev) => ({ ...prev, [id]: !prev[id] }));
-    }
-  };
-  const handlecolorchecklsit = () => {
-    const updatecolor = list.map((item) => {
-      if (selectid[item.id]) {
-        return { ...item, color: !item.color };
-      }
-      return item;
-    });
+  // const handleoncheckbox = (id) => {
+  //   setselectid((prev) => ({ ...prev, [id]: !prev[id] }));
 
-    setlist(updatecolor);
-    console.log(updatecolor);
-  };
+  //   console.log(selectid);
+  // };
+
   return (
     <main className=" p-2 bg-gray-400 w-full h-[90vh]">
       <section>
@@ -71,7 +73,7 @@ export default function Main() {
               <input
                 className=" bg-white p-2 rounded-md "
                 placeholder="Search"
-                onChange={handleonchange}
+                onChange={(e) => handleonchange(e, list)}
                 value={inputvalue.namelist}
                 name="namelist"
               />
@@ -103,10 +105,9 @@ export default function Main() {
                       <input
                         className=" w-4 h-4 rounded-md mr-2 checked:bg-amber-200"
                         type="checkbox"
-                        onChange={() => {
-                          handleoncheckbox(item.id), handlecolorchecklsit();
+                        onChange={(e) => {
+                          handleoncheckbox(e, item.id);
                         }}
-                        checked={selectid[item.id] || false}
                       />
 
                       {index + 1}
