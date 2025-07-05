@@ -13,7 +13,6 @@ export default function Main() {
   const [inputvalue, setinputvalue] = useState({
     id: Date.now(),
     namelist: "",
-    checked: false,
     time: new Date().toLocaleString(),
     color: false,
   });
@@ -22,16 +21,9 @@ export default function Main() {
   // * เป็นฟั่งชั่นเมื่อมีการเปลี่ยนแปลงก็จะเก็บ e หรือ event โดยสร้างตัวแปลเก็บชื่อ name,value เป็น object ที่ส่งมาตามทีี่ตั้งชื่อ เช่น
   // * เป็น name: "namelist"
   // * การใช้ prev เป็นการดึงค่าอันเก่ามาด้วย เมื่อมีการเปลี่ยนแปลงก็จะแทนที่ค่าตัวเก่า
-  const handleonchange = (e, item) => {
+  const handleonchange = (e) => {
     const { name, value } = e.target;
     setinputvalue((prev) => ({ ...prev, [name]: value }));
-    console.log(
-      selectid.map((item) => {
-        let id = [];
-        id = item.id;
-        console.log(id);
-      })
-    );
   };
   // * เมื่อมีการกด submit ของ form รับ event มาแล้วเรียกใช้ preventDefault() เพื่อให้หน้าเว็บโหลด
   // * จากนั้นดึงค่าจาก list อันเก่ามาด้วยแทนที่ prev เมื่อกดแล้วจะแทนที่ตัวเก่าด้วยตัวใหม่ของ inputvalue
@@ -44,24 +36,37 @@ export default function Main() {
       setinputvalue({
         id: Date.now(),
         namelist: "",
-        checkend: false,
         time: new Date().toLocaleString(),
         color: false,
       });
-      setselectid((prev) => [...prev, inputvalue]);
+
       setErorr(false);
     } else {
       e.preventDefault();
       setErorr(true);
     }
   };
-  // * แก้ไข้ให้มันเลือก checked ใน objectด้วย
-  const [selectid, setselectid] = useState([]);
-  // const handleoncheckbox = (id) => {
-  //   setselectid((prev) => ({ ...prev, [id]: !prev[id] }));
+  // ! ปัญหาที่เจอคือไม่รู้วิธีใช้ .map ที่ครบถ้วน
+  // ? จงไปหาวิธัใช้มาให้ครบ
+  // * เมื่อมีการเปลี่ยนแปลงจะเรียกใช้ handleoncheckbox และสร้างตัวแปรเก็บ ค่า check
+  // * หลังจากนั้นสร้างตัวแปร เมื่อมีการเปลี่ยนแปลง
+  // * ทำการ map data หรือ list หรือแสดงแต่ละตัวออกมาเก็บไว้ใน updatedList
+  // * โดย ถ้า item.id ของ item(ตัวแทนของ list) ตรงกับ id ที่ส่งเข้ามาให้เปลี่ยนเฉพาะตัวนั้นที่ตรงกัน
+  // * โดยเข้าถึง color ถ้า checkend เป็นจริงให้เปลี่ยนตามค่า
+  const handleoncheckbox = (e, id) => {
+    const checked = e.target.checked;
+    const updatedList = list.map((item) => {
+      if (item.id === id) {
+        return {
+          ...item,
+          color: checked ? true : false,
+        };
+      }
+      return item;
+    });
 
-  //   console.log(selectid);
-  // };
+    setlist(updatedList);
+  };
 
   return (
     <main className=" p-2 bg-gray-400 w-full h-[90vh]">
@@ -88,53 +93,8 @@ export default function Main() {
               </div>
             </form>
           </section>
-          {/* <Itemlist list={list} checkend={checkend} setcheckend={setcheckend} /> */}
-          <section className="grid grid-cols-1 gap-2 mt-2">
-            {list.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className={
-                    item.color
-                      ? "flex justify-between items-center bg-gray-500 p-2 rounded-2xl"
-                      : "flex justify-between items-center bg-cyan-500 p-2 rounded-2xl"
-                  }
-                >
-                  <div className=" ml-2 flex  ">
-                    <div className="mr-2 flex items-center">
-                      <input
-                        className=" w-4 h-4 rounded-md mr-2 checked:bg-amber-200"
-                        type="checkbox"
-                        onChange={(e) => {
-                          handleoncheckbox(e, item.id);
-                        }}
-                      />
-
-                      {index + 1}
-                    </div>
-                    <div key={item.id}>
-                      <h1
-                        className={
-                          item.color ? "text-lg  bg-red-400" : "text-lg "
-                        }
-                      >
-                        {item.namelist}
-                      </h1>
-                      <div className="">
-                        <p className=" text-[12px] text-white ">{item.time}</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="p-2">
-                    <button className="p-2 mr-4 bg-red-300 rounded-md">
-                      delete
-                    </button>
-                    <button className="p-2 bg-blue-300 rounded-md">edit</button>
-                  </div>
-                </div>
-              );
-            })}
-          </section>
+          <Itemlist list={list} handleoncheckbox={handleoncheckbox} />
+          <section className="grid grid-cols-1 gap-2 mt-2"></section>
         </header>
       </section>
     </main>
