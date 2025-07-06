@@ -68,6 +68,12 @@ export default function Main() {
     setlist(updatedList);
   };
 
+  const DeleteOption = (id) => {
+    console.log(id + " ลบ");
+  };
+  const EditOption = (id) => {
+    console.log(id + " แก้ไข");
+  };
   return (
     <main className=" p-2 bg-gray-400 w-full h-[90vh]">
       <section>
@@ -93,7 +99,12 @@ export default function Main() {
               </div>
             </form>
           </section>
-          <Itemlist list={list} handleoncheckbox={handleoncheckbox} />
+          <Itemlist
+            list={list}
+            handleoncheckbox={handleoncheckbox}
+            DeleteOption={DeleteOption}
+            EditOption={EditOption}
+          />
           <section className="grid grid-cols-1 gap-2 mt-2"></section>
         </header>
       </section>

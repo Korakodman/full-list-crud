@@ -1,6 +1,11 @@
 import React from "react";
 
-export default function Itemlist({ list, handleoncheckbox }) {
+export default function Itemlist({
+  list,
+  handleoncheckbox,
+  DeleteOption,
+  EditOption,
+}) {
   return (
     <section className="grid grid-cols-1 gap-2 mt-2">
       {list.map((item, index) => {
@@ -33,8 +38,20 @@ export default function Itemlist({ list, handleoncheckbox }) {
               </div>
             </div>
             <div className="p-2">
-              <button className="p-2 mr-4 bg-red-300 rounded-md">delete</button>
-              <button className="p-2 bg-blue-300 rounded-md">edit</button>
+              <button
+                type="button"
+                className="p-2 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200"
+                onClick={() => EditOption(item.id)}
+              >
+                Edit
+              </button>
+              <button
+                type="button"
+                className="p-2 mr-4 bg-red-300 rounded-md hover:bg-red-500 duration-200"
+                onClick={() => DeleteOption(item.id)}
+              >
+                Delete
+              </button>
             </div>
           </div>
         );
