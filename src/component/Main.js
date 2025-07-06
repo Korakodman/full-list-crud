@@ -52,7 +52,7 @@ export default function Main() {
   // * หลังจากนั้นสร้างตัวแปร เมื่อมีการเปลี่ยนแปลง
   // * ทำการ map data หรือ list หรือแสดงแต่ละตัวออกมาเก็บไว้ใน updatedList
   // * โดย ถ้า item.id ของ item(ตัวแทนของ list) ตรงกับ id ที่ส่งเข้ามาให้เปลี่ยนเฉพาะตัวนั้นที่ตรงกัน
-  // * โดยเข้าถึง color ถ้า checkend เป็นจริงให้เปลี่ยนตามค่า
+  // * โดยเข้าถึง color ถ้า checkend เป็นจริงให้เปลี่ยนตามค่า ถ้า checked ? "จริง" : "ไม่จริง"
   const handleoncheckbox = (e, id) => {
     const checked = e.target.checked;
     const updatedList = list.map((item) => {
@@ -68,9 +68,12 @@ export default function Main() {
     setlist(updatedList);
   };
 
+  // * ฟั่งชั่นลบ รับ id เข้ามาแล้วทำการ เรียกใช้ ฟั่งชั้นเซ็ต setlist ดึงค่าต่างๆภายมา .filter โดย เม็ดธอดนี้ไว้กรองข้อมูลใน array
+  // * โดยจะสร้าง array ใหม่กลับเข้าไปใน list โดยถ้า item เข้าถึง .id ไม่เท่ากันกับ id ก็สร้างใหม่
   const DeleteOption = (id) => {
-    console.log(id + " ลบ");
+    setlist((prev) => prev.filter((item) => item.id !== id));
   };
+  // ? จะสร้างเป็น popup ขึ้นมาให้กรอกเพืื่อเปลี่ยนอย่างไง
   const EditOption = (id) => {
     console.log(id + " แก้ไข");
   };
