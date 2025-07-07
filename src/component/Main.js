@@ -77,9 +77,22 @@ export default function Main() {
   const EditOption = (id) => {
     console.log(id + " แก้ไข");
   };
+  const modal = useRef();
+  const OpenDialog = () => {
+    modal.current.show();
+  };
+  const CloseDialoig = () => {
+    modal.current.close();
+  };
+  const ClickOutside = (e) => {
+    if (e.target === modal.current) {
+      CloseDialoig();
+    }
+  };
+
   return (
     <main className=" p-2 bg-gray-400 w-full h-[90vh]">
-      <section>
+      <section className=" ">
         <header>
           <h1 className="text-3xl">Code Note</h1>
           <section className=" flex">
@@ -107,10 +120,24 @@ export default function Main() {
             handleoncheckbox={handleoncheckbox}
             DeleteOption={DeleteOption}
             EditOption={EditOption}
+            OpenDialog={OpenDialog}
           />
           <section className="grid grid-cols-1 gap-2 mt-2"></section>
         </header>
       </section>
+      ;
+      <dialog
+        ref={modal}
+        className=" w-[400px] rounded-md p-4 border-black bg-gray-200 shadow-md "
+        onClick={(e) => ClickOutside(e)}
+      >
+        <div>
+          <div>Dialog</div>
+          <button onClick={CloseDialoig} className="bg-gray-300">
+            Close
+          </button>
+        </div>
+      </dialog>
     </main>
   );
 }
