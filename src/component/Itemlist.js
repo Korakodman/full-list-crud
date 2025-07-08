@@ -6,6 +6,7 @@ export default function Itemlist({
   DeleteOption,
   EditOption,
   OpenDialog,
+  setOptionDiaglog,
 }) {
   return (
     <div>
@@ -46,14 +47,18 @@ export default function Itemlist({
                 <button
                   type="button"
                   className="p-2 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200"
-                  onClick={() => OpenDialog(item.id)}
+                  onClick={() => {
+                    OpenDialog(false, item.id);
+                  }}
                 >
                   Edit
                 </button>
                 <button
                   type="button"
                   className="p-2 mr-4 bg-red-300 rounded-md hover:bg-red-500 duration-200"
-                  onClick={() => DeleteOption(item.id)}
+                  onClick={() => {
+                    OpenDialog(true, item.id);
+                  }}
                 >
                   Delete
                 </button>

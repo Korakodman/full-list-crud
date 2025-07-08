@@ -81,9 +81,21 @@ export default function Home() {
     console.log(id + " แก้ไข");
   };
   // * สร้างโจทย์สร้าง Dialog ขึ้นมาและสร้างฟั่งชั้นการกระทำต่างๆของมันไม่ว่าจะ เปิด ปิด คลิกข้างนอกแล้วปิด
+  const [OptionDiaglog, setOptionDiaglog] = useState();
+  const [SelectNote, setSelectNote] = useState([]);
   const modal = useRef();
-  const OpenDialog = () => {
-    modal.current.showModal();
+  const OpenDialog = (e, id) => {
+    if (e) {
+      // * ลบข้อมูลถ้าเป็นจริง
+      modal.current.showModal();
+      setOptionDiaglog(e);
+      setSelectNote(id);
+    } else {
+      // * แก้ไขข้อมูล
+      modal.current.showModal();
+      setOptionDiaglog(e);
+      setSelectNote(id);
+    }
   };
   const CloseDialoig = () => {
     modal.current.close();
@@ -93,7 +105,18 @@ export default function Home() {
       CloseDialoig();
     }
   };
-
+  const FormDialog = (e) => {
+    e.preventDefault();
+    if (OptionDiaglog) {
+      // * ลบข้อมูลถ้าเป็นจริง
+      DeleteOption(SelectNote);
+      CloseDialoig();
+    } else {
+      // * แก้ไขข้อมูล
+      console.log("แก้ไข");
+      CloseDialoig();
+    }
+  };
   return (
     <>
       <Navbar />
@@ -127,6 +150,7 @@ export default function Home() {
               DeleteOption={DeleteOption}
               EditOption={EditOption}
               OpenDialog={OpenDialog}
+              setOptionDiaglog={setOptionDiaglog}
             />
           </header>
         </section>
@@ -139,10 +163,17 @@ export default function Home() {
         onClick={(e) => ClickOutside(e)}
       >
         <div>
-          <div>Dialog</div>
-          <button onClick={CloseDialoig} className="bg-gray-300">
-            Close
-          </button>
+          <div>{OptionDiaglog ? "Do You Want To Delete?" : "Edit New"}</div>
+          <div className="flex justify-between">
+            <form onSubmit={(e) => FormDialog(e)}>
+              <button className={OptionDiaglog ? "btn-Delete" : "btn-Edit"}>
+                {OptionDiaglog ? "Delete" : "Edit"}
+              </button>
+            </form>
+            <button onClick={CloseDialoig} className="bg-gray-300 p-2">
+              Close
+            </button>
+          </div>
         </div>
       </dialog>
     </>

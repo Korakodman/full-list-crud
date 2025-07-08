@@ -11,7 +11,12 @@ li{
    padding-right: 1.5rem;
 }
 
-
+.btn-Delete{
+  @apply p-2 rounded-lg bg-red-300
+}
+.btn-Edit{
+  @apply bg-blue-300 p-2 rounded-lg
+}
 
 body {
  
