@@ -166,9 +166,10 @@ export default function Home() {
           <div>{OptionDiaglog ? "Do You Want To Delete?" : "Edit New"}</div>
           <div className="flex justify-between">
             <form onSubmit={(e) => FormDialog(e)}>
+           <div className="flex justify-between"><input className=" bg-gray-200"/>
               <button className={OptionDiaglog ? "btn-Delete" : "btn-Edit"}>
                 {OptionDiaglog ? "Delete" : "Edit"}
-              </button>
+              </button></div>
             </form>
             <button onClick={CloseDialoig} className="bg-gray-300 p-2">
               Close
