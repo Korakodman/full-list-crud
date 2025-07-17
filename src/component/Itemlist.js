@@ -48,7 +48,7 @@ export default function Itemlist({
                   type="button"
                   className="p-2 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200"
                   onClick={() => {
-                    OpenDialog(false, item.id);
+                    OpenDialog(false, item.id,item.namelist);
                   }}
                 >
                   Edit
