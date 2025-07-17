@@ -73,10 +73,26 @@ export default function Main() {
     const DeleteOption = (id) => {
       setlist((prev) => prev.filter((item) => item.id !== id));
     };
-    // ? จะสร้างเป็น popup ขึ้นมาให้กรอกเพืื่อเปลี่ยนอย่างไง
+    // * ฟั่งชั่นแก้ไขข้อมูล โดยรับ id เข้ามาแล้วทำการ map list ออกมาใหม่
+    // * โดยจะทำการเปรียบเทียบ item.id กับ id ที่ส่งเข้ามา
+    // * ถ้าเท่ากันจะทำการเปลี่ยนแปลงค่า namelist ของ item นั้นๆ
+    // * โดยจะใช้ SelectNote.namelist ที่เก็บค่าจาก input ใน dialog
+    // * สุดท้ายจะทำการ setlist ด้วย updatedList ที่ได้จากการ map ใหม่
+    // * ทำให้ข้อมูลใน list ถูกอัพเดตตามที่ต้องการ
+    // * โดยจะไม่ลบข้อมูลเดิมออกไป แต่จะเปลี่ยนแปลงข้อมูลที่ต้องการแก้ไขเท่านั้น
   
     const EditOption = (id) => {
-      console.log(id + " แก้ไข");
+     const updateList = list.map((item) => {
+          if(item.id === id){
+            return{
+              ...item,
+              namelist: SelectNote.namelist,
+              time: new Date().toLocaleString()
+            }
+          }
+          return item
+        })
+        setlist(updateList)
     };
     // * สร้างโจทย์สร้าง Dialog ขึ้นมาและสร้างฟั่งชั้นการกระทำต่างๆของมันไม่ว่าจะ เปิด ปิด คลิกข้างนอกแล้วปิด
     const [OptionDiaglog, setOptionDiaglog] = useState();
@@ -94,7 +110,7 @@ export default function Main() {
         modal.current.showModal();
         setOptionDiaglog(IsDelete);
         setSelectNote(note);
-        console.log(SelectNote)
+      
       }
     };
     const CloseDialoig = () => {
@@ -113,9 +129,19 @@ export default function Main() {
         CloseDialoig();
       } else {
         // * แก้ไขข้อมูล
-        console.log("แก้ไข");
+        EditOption(SelectNote.id);
         CloseDialoig();
       }
+    }
+
+    // * สร้างฟั่งชั่น handleonchangeDialog เพื่อเปลี่ยนแปลงค่าใน input ของ dialog
+    // * โดยจะรับ e หรือ event เข้ามาแล้วทำการ setSelectNote โดยใช้ prev เพื่อดึงค่าก่อนหน้าออกมา
+    // * แล้วเปลี่ยนแค่าของ SelectNote ให้เป็นค่าใหม่ที่ได้จาก e.target.value
+    // * โดย SelectNote จะเก็บค่า id และ namelist ที่จะใช้ในการแก้ไขข้อมูลใน dialog
+
+const handleonchangeDialog = (e) =>{
+      
+      setSelectNote((prev) => ({ ...prev, namelist: e.target.value }));
     }
   return  ( 
    <main className=" p-2 bg-gray-400 w-full h-[90vh]">
@@ -163,7 +189,9 @@ export default function Main() {
             <div className="flex justify-between">
               <form onSubmit={(e) => FormDialog(e)}>
                  <div className="flex justify-between  w-[300px]">
-                {OptionDiaglog ? "" :   <input className=" bg-gray-300 p-2 rounded-xl 2" value={SelectNote.namelist || ""}/>}
+                {OptionDiaglog ? "" :   
+                <input onChange={(e) => handleonchangeDialog(e)} className=" bg-gray-300 p-2 rounded-xl 2" value={SelectNote.namelist || ""}
+                />}
                 <button className={OptionDiaglog ? "btn-Delete" : "btn-Edit"}>
                   {OptionDiaglog ? "Delete" : "Edits"}
                 </button>
