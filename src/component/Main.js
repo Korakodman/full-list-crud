@@ -2,11 +2,13 @@
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import Itemlist from "./Itemlist";
+import { Button, message, Space } from 'antd';
 export default function Main() {
     // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
   
     const [list, setlist] = useState([]);
-  
+    const [originalList,SetoriginalList] = useState([])
+   
     // *เป็น state ไว้เก็บการเคลื่อนไวของ input ต้องสร้าง name:value ไว้ด้วยไม่งั้นมันจะหาไม่เจอว่าจะแสดงเป็นอะไร
     // ! เมื่อ มันหาไม่เจอจะขึ้นใน input หรือ console [object Object] แก้โดยใส่ ชื่อ state ของ object ตามด้วย เข้าถึงค่าภายในของมั้น เช่น
     // ! inputvalue.namelist
@@ -33,6 +35,7 @@ export default function Main() {
       if (inputvalue.namelist) {
         e.preventDefault();
         setlist((prev) => [...prev, inputvalue]);
+        SetoriginalList((prev) => [...prev, inputvalue])
         setinputvalue({
           id: Date.now(),
           namelist: "",
@@ -72,6 +75,8 @@ export default function Main() {
     // * โดยจะสร้าง array ใหม่กลับเข้าไปใน list โดยถ้า item เข้าถึง .id ไม่เท่ากันกับ id ก็สร้างใหม่
     const DeleteOption = (id) => {
       setlist((prev) => prev.filter((item) => item.id !== id));
+      SetoriginalList((prev) => prev.filter((item) => item.id !== id));
+      success()
     };
     // * ฟั่งชั่นแก้ไขข้อมูล โดยรับ id เข้ามาแล้วทำการ map list ออกมาใหม่
     // * โดยจะทำการเปรียบเทียบ item.id กับ id ที่ส่งเข้ามา
@@ -93,7 +98,23 @@ export default function Main() {
           return item
         })
         setlist(updateList)
+        SetoriginalList(updateList)
+        Editsuccess()
     };
+      const [messageApi, contextHolder] = message.useMessage();
+
+      const success = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Delete Success',
+    });
+  };
+ const Editsuccess = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Edit Success',
+    });
+  }
     // * สร้างโจทย์สร้าง Dialog ขึ้นมาและสร้างฟั่งชั้นการกระทำต่างๆของมันไม่ว่าจะ เปิด ปิด คลิกข้างนอกแล้วปิด
     const [OptionDiaglog, setOptionDiaglog] = useState();
     const [SelectNote, setSelectNote] = useState({});
@@ -112,6 +133,8 @@ export default function Main() {
         setSelectNote(note);
       
       }
+
+      // * เป็นฟั่งชั่นเปิด ปิด Dialog และ ฟอร็ม Dialog
     };
     const CloseDialoig = () => {
       modal.current.close();
@@ -127,6 +150,7 @@ export default function Main() {
         // * ลบข้อมูลถ้าเป็นจริง
         DeleteOption(SelectNote);
         CloseDialoig();
+       
       } else {
         // * แก้ไขข้อมูล
         EditOption(SelectNote.id);
@@ -143,17 +167,32 @@ const handleonchangeDialog = (e) =>{
       
       setSelectNote((prev) => ({ ...prev, namelist: e.target.value }));
     }
+
+const [SearchInput, setSearchInput] = useState("")
+const handleonSearch = (e) =>{
+  const input = e.target.value
+   setSearchInput(input)
+if(input){
+   const updateList = list.filter(item=>
+    item.namelist.toLowerCase().includes(SearchInput.toLowerCase())
+   )  
+   setlist(updateList)
+  
+}else{
+ setlist(originalList)
+}
+}
   return  ( 
    <main className=" p-2 bg-gray-400 w-full h-[90vh]">
           <section className=" ">
-            <header>
+            <div>
               <h1 className="text-3xl">Code Note</h1>
               <section className=" flex">
                 <form onSubmit={submitform}>
                   <input
                     className=" bg-white p-2 rounded-md "
-                    placeholder="Search"
-                    onChange={(e) => handleonchange(e, list)}
+                    placeholder="Add Text"
+                    onChange={(e) => handleonchange(e)}
                     value={inputvalue.namelist}
                     name="namelist"
                   />
@@ -167,7 +206,14 @@ const handleonchangeDialog = (e) =>{
                     {Erorr ? "ใส่ข้อมูลด้วยครับ" : ""}
                   </div>
                 </form>
+                <div>
+                  <input type="text" placeholder="Search" className="bg-white p-2 rounded-md ml-2" value={SearchInput}
+                  onChange={(e)=>handleonSearch(e)}/>
+                  
+                </div>
               </section>
+            </div>
+            <div> 
               <Itemlist
                 list={list}
                 handleoncheckbox={handleoncheckbox}
@@ -175,8 +221,8 @@ const handleonchangeDialog = (e) =>{
                 EditOption={EditOption}
                 OpenDialog={OpenDialog}
                 setOptionDiaglog={setOptionDiaglog}
-              />
-            </header>
+              /></div>
+                    {contextHolder}
           </section>
           <dialog
           ref={modal}
@@ -190,8 +236,9 @@ const handleonchangeDialog = (e) =>{
               <form onSubmit={(e) => FormDialog(e)}>
                  <div className="flex justify-between  w-[300px]">
                 {OptionDiaglog ? "" :   
-                <input onChange={(e) => handleonchangeDialog(e)} className=" bg-gray-300 p-2 rounded-xl 2" value={SelectNote.namelist || ""}
-                />}
+                <input onChange={(e) => handleonchangeDialog(e)} className=" bg-gray-300 p-2 rounded-xl 2" 
+                value={SelectNote.namelist || ""}
+                name="namelist"/>}
                 <button className={OptionDiaglog ? "btn-Delete" : "btn-Edit"}>
                   {OptionDiaglog ? "Delete" : "Edits"}
                 </button>
