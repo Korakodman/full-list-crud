@@ -115,7 +115,7 @@ export default function Main() {
       content: 'Edit Success',
     });
   }
-    // * สร้างโจทย์สร้าง Dialog ขึ้นมาและสร้างฟั่งชั้นการกระทำต่างๆของมันไม่ว่าจะ เปิด ปิด คลิกข้างนอกแล้วปิด
+    // * สร้าง Dialog ขึ้นมาและสร้างฟั่งชั้นการกระทำต่างๆของมันไม่ว่าจะ เปิด ปิด คลิกข้างนอกแล้วปิด
     const [OptionDiaglog, setOptionDiaglog] = useState();
     const [SelectNote, setSelectNote] = useState({});
     const modal = useRef();
