@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import connectDB from "@/lib/mongodb";
+import Note from "@/app/models/Note";
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*", // หรือใส่ URL ที่ต้องการอนุญาต
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
@@ -6,6 +8,7 @@ const corsHeaders = {
 };
 
 export async function GET() {
+  await connectDB()
     const note = [{
       id: Date.now(),
       namelist: "Korakod",
@@ -29,10 +32,14 @@ export async function GET() {
 export async function POST(req) {
   
     
+   try {
     const {name} = await req.json()
-    const newNote = { id: Date.now() , name}
-    console.log(newNote,"ได้ข้อมูล")
+    console.log(name,"ได้ข้อมูล")
+    const newNote = new Note({name})
+    await newNote.save()
     return NextResponse.json(newNote,{status:201, headers :corsHeaders})
-  
+   } catch (error) {
+    console.error("error",error)
+   }
    
 }
