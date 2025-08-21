@@ -9,22 +9,17 @@ const corsHeaders = {
 
 export async function GET() {
   await connectDB()
-    const note = [{
-      namelist: "Korakod",
-      time: new Date().toLocaleString(),
-      color: false,
-    },
-  {
-      namelist: "Sahapham",
-      time: new Date().toLocaleString(),
-      color: false,
-    },
-  {
-      namelist: "patson",
-      time: new Date().toLocaleString(),
-      color: false,
-    }]
-    return NextResponse.json(note,{ status: 200})
+    try {
+      const note = await Note.find({})
+         return NextResponse.json(note,{ status: 200,headers:corsHeaders})
+    } catch (error) {
+      return NextResponse.json({
+        error: error.message,
+      },{
+        status:500,headers:corsHeaders
+      })
+    }
+ 
 }
 export async function POST(req) {
    await connectDB()

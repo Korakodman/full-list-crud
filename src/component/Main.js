@@ -4,6 +4,7 @@ import { useState } from "react";
 import Itemlist from "./Itemlist";
 import { Button, message, Space } from 'antd';
 export default function Main() {
+const URLMONGODB = process.env.URLMONGODB
     // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
   
     const [list, setlist] = useState([]);
@@ -13,7 +14,6 @@ export default function Main() {
     // ! เมื่อ มันหาไม่เจอจะขึ้นใน input หรือ console [object Object] แก้โดยใส่ ชื่อ state ของ object ตามด้วย เข้าถึงค่าภายในของมั้น เช่น
     // ! inputvalue.namelist
     const [inputvalue, setinputvalue] = useState({
-      id: Date.now(),
       namelist: "",
       time: new Date().toLocaleString(),
       color: false,
@@ -31,20 +31,32 @@ export default function Main() {
     // * จากนั้นดึงค่าจาก list อันเก่ามาด้วยแทนที่ prev เมื่อกดแล้วจะแทนที่ตัวเก่าด้วยตัวใหม่ของ inputvalue
     // * จากนั้นล้างค่าที่เป็น inputvalue ให้หมด
   
-    const submitform = (e) => {
+    async function submitform  (e)  {
       if (inputvalue.namelist) {
         e.preventDefault();
         setlist((prev) => [...prev, inputvalue]);
         SetoriginalList((prev) => [...prev, inputvalue])
         setinputvalue({
-          id: Date.now(),
           namelist: "",
           time: new Date().toLocaleString(),
           color: false,
         });
-  
+     try {
+       const respone = await fetch(`/api/notelist`,{
+        method:"POST",
+        headers:{
+          "content-Type":"application/json",
+        },
+        body: JSON.stringify(inputvalue)
+      })
+     } catch (error) {
+      console.log(error)
+     }
         setErorr(false);
-      } else {
+      } 
+      
+      
+      else {
         e.preventDefault();
         setErorr(true);
       }
@@ -59,7 +71,7 @@ export default function Main() {
     const handleoncheckbox = (e, id) => {
       const checked = e.target.checked;
       const updatedList = list.map((item) => {
-        if (item.id === id) {
+        if (item._id === _id) {
           return {
             ...item,
             color: checked ? true : false,
@@ -74,8 +86,8 @@ export default function Main() {
     // * ฟั่งชั่นลบ รับ id เข้ามาแล้วทำการ เรียกใช้ ฟั่งชั้นเซ็ต setlist ดึงค่าต่างๆภายมา .filter โดย เม็ดธอดนี้ไว้กรองข้อมูลใน array
     // * โดยจะสร้าง array ใหม่กลับเข้าไปใน list โดยถ้า item เข้าถึง .id ไม่เท่ากันกับ id ก็สร้างใหม่
     const DeleteOption = (id) => {
-      setlist((prev) => prev.filter((item) => item.id !== id));
-      SetoriginalList((prev) => prev.filter((item) => item.id !== id));
+      setlist((prev) => prev.filter((item) => item._id !== _id));
+      SetoriginalList((prev) => prev.filter((item) => item._id !== _id));
       success()
     };
     // * ฟั่งชั่นแก้ไขข้อมูล โดยรับ id เข้ามาแล้วทำการ map list ออกมาใหม่
@@ -88,7 +100,7 @@ export default function Main() {
   
     const EditOption = (id) => {
      const updateList = list.map((item) => {
-          if(item.id === id){
+          if(item._id === _id){
             return{
               ...item,
               namelist: SelectNote.namelist,
