@@ -15,7 +15,7 @@ export default function Itemlist({
         {list.map((item, index) => {
           return (
             <div
-              key={item._id}
+              key={index +1}
               className={
                 item.color
                   ? "bg-blue-400 flex justify-between  duration-200 items-center p-2"

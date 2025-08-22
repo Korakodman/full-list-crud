@@ -9,7 +9,24 @@ const URLMONGODB = process.env.URLMONGODB
   
     const [list, setlist] = useState([]);
     const [originalList,SetoriginalList] = useState([])
-   
+    const [erorr, setErorr] = useState(false);
+    const [loading,setloading] = useState(false)
+    async function Getdata(params) {
+       await fetch(`/api/notelist`)
+         .then((res)=> res.json())
+         .then((data)=>setlist(data))
+    }
+
+    useEffect(()=>{
+      try {
+        setloading(true)
+        Getdata()
+      } catch (error) {
+        
+      }
+    },[erorr])
+
+
     // *เป็น state ไว้เก็บการเคลื่อนไวของ input ต้องสร้าง name:value ไว้ด้วยไม่งั้นมันจะหาไม่เจอว่าจะแสดงเป็นอะไร
     // ! เมื่อ มันหาไม่เจอจะขึ้นใน input หรือ console [object Object] แก้โดยใส่ ชื่อ state ของ object ตามด้วย เข้าถึงค่าภายในของมั้น เช่น
     // ! inputvalue.namelist
@@ -18,7 +35,7 @@ const URLMONGODB = process.env.URLMONGODB
       time: new Date().toLocaleString(),
       color: false,
     });
-    const [Erorr, setErorr] = useState(false);
+   
   
     // * เป็นฟั่งชั่นเมื่อมีการเปลี่ยนแปลงก็จะเก็บ e หรือ event โดยสร้างตัวแปลเก็บชื่อ name,value เป็น object ที่ส่งมาตามทีี่ตั้งชื่อ เช่น
     // * เป็น name: "namelist"
@@ -41,8 +58,9 @@ const URLMONGODB = process.env.URLMONGODB
           time: new Date().toLocaleString(),
           color: false,
         });
+        // * เมื่อมีการกด submit จะเรียกใช้ api ส่งค่า inputvalue ไปยังฐานข้อมูล
      try {
-       const respone = await fetch(`/api/notelist`,{
+       await fetch(`/api/notelist`,{
         method:"POST",
         headers:{
           "content-Type":"application/json",
@@ -68,7 +86,7 @@ const URLMONGODB = process.env.URLMONGODB
     // * ทำการ map data หรือ list หรือแสดงแต่ละตัวออกมาเก็บไว้ใน updatedList
     // * โดย ถ้า item.id ของ item(ตัวแทนของ list) ตรงกับ id ที่ส่งเข้ามาให้เปลี่ยนเฉพาะตัวนั้นที่ตรงกัน
     // * โดยเข้าถึง color ถ้า checkend เป็นจริงให้เปลี่ยนตามค่า ถ้า checked ? "จริง" : "ไม่จริง"
-    const handleoncheckbox = (e, id) => {
+    const handleoncheckbox = (e, _id) => {
       const checked = e.target.checked;
       const updatedList = list.map((item) => {
         if (item._id === _id) {
@@ -85,7 +103,7 @@ const URLMONGODB = process.env.URLMONGODB
   
     // * ฟั่งชั่นลบ รับ id เข้ามาแล้วทำการ เรียกใช้ ฟั่งชั้นเซ็ต setlist ดึงค่าต่างๆภายมา .filter โดย เม็ดธอดนี้ไว้กรองข้อมูลใน array
     // * โดยจะสร้าง array ใหม่กลับเข้าไปใน list โดยถ้า item เข้าถึง .id ไม่เท่ากันกับ id ก็สร้างใหม่
-    const DeleteOption = (id) => {
+    const DeleteOption = (_id) => {
       setlist((prev) => prev.filter((item) => item._id !== _id));
       SetoriginalList((prev) => prev.filter((item) => item._id !== _id));
       success()
@@ -98,7 +116,7 @@ const URLMONGODB = process.env.URLMONGODB
     // * ทำให้ข้อมูลใน list ถูกอัพเดตตามที่ต้องการ
     // * โดยจะไม่ลบข้อมูลเดิมออกไป แต่จะเปลี่ยนแปลงข้อมูลที่ต้องการแก้ไขเท่านั้น
   
-    const EditOption = (id) => {
+    const EditOption = (_id) => {
      const updateList = list.map((item) => {
           if(item._id === _id){
             return{
@@ -215,7 +233,7 @@ if(input){
                     Add
                   </button>
                   <div className="text-red-500 mt-2">
-                    {Erorr ? "ใส่ข้อมูลด้วยครับ" : ""}
+                    {erorr ? "ใส่ข้อมูลด้วยครับ" : ""}
                   </div>
                 </form>
                 <div>
@@ -225,6 +243,7 @@ if(input){
                 </div>
               </section>
             </div>
+            <div className=" text-yellow-300 text-2xl ">{loading  ? "" :"Loading" }</div>
             <div> 
               <Itemlist
                 list={list}
