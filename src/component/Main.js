@@ -103,11 +103,25 @@ const URLMONGODB = process.env.URLMONGODB
   
     // * ฟั่งชั่นลบ รับ id เข้ามาแล้วทำการ เรียกใช้ ฟั่งชั้นเซ็ต setlist ดึงค่าต่างๆภายมา .filter โดย เม็ดธอดนี้ไว้กรองข้อมูลใน array
     // * โดยจะสร้าง array ใหม่กลับเข้าไปใน list โดยถ้า item เข้าถึง .id ไม่เท่ากันกับ id ก็สร้างใหม่
-    const DeleteOption = (_id) => {
-      setlist((prev) => prev.filter((item) => item._id !== _id));
-      SetoriginalList((prev) => prev.filter((item) => item._id !== _id));
-      success()
-    };
+  async function DeleteOption  (_id) {
+      setloading(true)
+   try {
+     const respone = await fetch(`/api/notelist/${_id}`,{
+        method:"DELETE",
+      })
+      if(respone.ok){
+     setlist((prev)=> prev.filter((note)=> note._id !== _id))
+     SetoriginalList((prev)=> prev.filter((notepast)=>notepast._id !== _id))
+      }
+    
+     } catch (error) {
+      console.log(error)
+     }
+        setErorr(false);
+      
+     success() }
+    ;
+  
     // * ฟั่งชั่นแก้ไขข้อมูล โดยรับ id เข้ามาแล้วทำการ map list ออกมาใหม่
     // * โดยจะทำการเปรียบเทียบ item.id กับ id ที่ส่งเข้ามา
     // * ถ้าเท่ากันจะทำการเปลี่ยนแปลงค่า namelist ของ item นั้นๆ

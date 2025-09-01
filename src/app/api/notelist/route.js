@@ -13,11 +13,10 @@ export async function GET() {
       const note = await Note.find({})
          return NextResponse.json(note,{ status: 200,headers:corsHeaders})
     } catch (error) {
-      return NextResponse.json({
-        error: error.message,
-      },{
-        status:500,headers:corsHeaders
-      })
+      return NextResponse.json(
+        {error: error.message,},
+        {status:500,headers:corsHeaders }
+      )
     }
  
 }
