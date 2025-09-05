@@ -64,10 +64,10 @@ export default function Itemlist({
                 </button>
               </div>
             </div>
-          );
+          )
         })}
       </section>
-      ;
+      
     </div>
   );
 }

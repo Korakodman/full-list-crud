@@ -7,12 +7,14 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
-export async function DELETE(req,context) {
+export async function DELETE(req,{params}) {
     await connectDB()
     try {
-        const {params} =  context
-        const id = await params
+
+       const id = await params.id
+        //  console.log("params id =>", params.id)
         const deletedUser = await Note.findByIdAndDelete(new ObjectId(id));
+
         if(!deletedUser){
           return NextResponse.json({message : "Note Not Found"},{ status:404 ,headers: corsHeaders})
         }

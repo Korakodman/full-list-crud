@@ -16,18 +16,7 @@ const URLMONGODB = process.env.URLMONGODB
          .then((res)=> res.json())
          .then((data)=>setlist(data))
     }
-
-    useEffect(()=>{
-      try {
-        setloading(true)
-        Getdata()
-      } catch (error) {
-        
-      }
-    },[erorr])
-
-
-    // *เป็น state ไว้เก็บการเคลื่อนไวของ input ต้องสร้าง name:value ไว้ด้วยไม่งั้นมันจะหาไม่เจอว่าจะแสดงเป็นอะไร
+// *เป็น state ไว้เก็บการเคลื่อนไวของ input ต้องสร้าง name:value ไว้ด้วยไม่งั้นมันจะหาไม่เจอว่าจะแสดงเป็นอะไร
     // ! เมื่อ มันหาไม่เจอจะขึ้นใน input หรือ console [object Object] แก้โดยใส่ ชื่อ state ของ object ตามด้วย เข้าถึงค่าภายในของมั้น เช่น
     // ! inputvalue.namelist
     const [inputvalue, setinputvalue] = useState({
@@ -36,6 +25,17 @@ const URLMONGODB = process.env.URLMONGODB
       color: false,
     });
    
+    useEffect(()=>{
+      try {
+        setloading(true)
+        Getdata()
+      } catch (error) {
+        
+      }
+    },[loading])
+
+
+    
   
     // * เป็นฟั่งชั่นเมื่อมีการเปลี่ยนแปลงก็จะเก็บ e หรือ event โดยสร้างตัวแปลเก็บชื่อ name,value เป็น object ที่ส่งมาตามทีี่ตั้งชื่อ เช่น
     // * เป็น name: "namelist"
@@ -66,8 +66,11 @@ const URLMONGODB = process.env.URLMONGODB
           "content-Type":"application/json",
         },
         body: JSON.stringify(inputvalue)
-      })
-     } catch (error) {
+
+      }
+    )
+     setloading(false) 
+    } catch (error) {
       console.log(error)
      }
         setErorr(false);
