@@ -104,7 +104,26 @@ const URLMONGODB = process.env.URLMONGODB
   
       setlist(updatedList);
     };
-  
+    
+  async function headleDeleteSelected () {
+     setloading(false)
+    const idstoDelete = list.filter(item => item.color).map(item =>item._id)
+   if(idstoDelete.length === 0 ) return
+   const respone = await fetch (`/api/notelist/`,{
+    method :"DELETE",
+    headers: {"Content-Type":"application/json"},
+    body :  JSON.stringify({ids:idstoDelete})
+   })
+   
+   if(respone.ok){
+    setlist((prev)=>prev.filter((item)=>!idstoDelete.includes(item._id)))
+   
+   }
+   }
+
+
+
+
     // * ฟั่งชั่นลบ รับ id เข้ามาแล้วทำการ เรียกใช้ ฟั่งชั้นเซ็ต setlist ดึงค่าต่างๆภายมา .filter โดย เม็ดธอดนี้ไว้กรองข้อมูลใน array
     // * โดยจะสร้าง array ใหม่กลับเข้าไปใน list โดยถ้า item เข้าถึง .id ไม่เท่ากันกับ id ก็สร้างใหม่
   async function DeleteOption  (_id) {
@@ -271,6 +290,9 @@ if(input){
                   <input type="text" placeholder="Search" className="bg-white p-2 rounded-md ml-2" value={SearchInput}
                   onChange={(e)=>handleonSearch(e)}/>
                   
+                </div>
+                <div>
+                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-500 p-2 rounded-md  ml-2">DeleteSelect</button>
                 </div>
               </section>
             </div>

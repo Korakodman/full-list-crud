@@ -33,3 +33,20 @@ export async function POST(req) {
    }
    
 }
+export async function DELETE(req,{params}) {
+ await connectDB()
+ try {
+    // const SelectDelete = await params.id
+    const ids = await req.json()
+    console.log("ID ที่จะลบ", ids)
+    // if(!SelectDelete){
+    //           return NextResponse.json({message : "Note Not Found"},{ status:404 })
+    //         }
+    return NextResponse.json({message : "Delete Succese"},{status:200})
+ } catch (error) {
+    if(error){
+      console.log("error" , error)
+       return NextResponse.json({message : "Error "},{ status : 400})
+    }
+ }
+}
