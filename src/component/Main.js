@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import Itemlist from "./Itemlist";
@@ -133,8 +134,15 @@ const URLMONGODB = process.env.URLMONGODB
     // * ทำให้ข้อมูลใน list ถูกอัพเดตตามที่ต้องการ
     // * โดยจะไม่ลบข้อมูลเดิมออกไป แต่จะเปลี่ยนแปลงข้อมูลที่ต้องการแก้ไขเท่านั้น
   
-    const EditOption = (_id) => {
-     const updateList = list.map((item) => {
+  async function EditOption (_id)  {
+       setloading(true)
+    try {
+      const respone = await fetch(`/api/notelist/${_id}`,{
+        method : "PUT",
+        headers:{"Content-Type":"application/json"},body: JSON.stringify(SelectNote),
+      })
+      if(respone.ok){
+         const updateList = list.map((item) => {
           if(item._id === _id){
             return{
               ...item,
@@ -147,6 +155,12 @@ const URLMONGODB = process.env.URLMONGODB
         setlist(updateList)
         SetoriginalList(updateList)
         Editsuccess()
+      }
+    } catch (error) {
+      if(error){
+        console.log("Have a Error",erorr)
+      }
+    }
     };
       const [messageApi, contextHolder] = message.useMessage();
 
