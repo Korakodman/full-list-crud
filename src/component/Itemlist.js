@@ -30,6 +30,7 @@ export default function Itemlist({
                     onChange={(e) => {
                       handleoncheckbox(e, item._id);
                     }}
+                    checked= {item.color || false}
                   />
 
                   {index + 1}

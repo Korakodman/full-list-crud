@@ -24,7 +24,7 @@ export async function POST(req) {
    await connectDB()
    try {
     const body = await req.json();
-    console.log(body,"ได้ข้อมูล")
+    // console.log(body,"ได้ข้อมูล")
     const newNote = new Note(body)
     await newNote.save()
     return NextResponse.json(newNote,{status:201})
@@ -33,16 +33,18 @@ export async function POST(req) {
    }
    
 }
-export async function DELETE(req,{params}) {
+export async function DELETE(req) {
  await connectDB()
+ console.log("อันนี้ถูกเรียก")
  try {
-    // const SelectDelete = await params.id
-    const ids = await req.json()
-    console.log("ID ที่จะลบ", ids)
-    // if(!SelectDelete){
-    //           return NextResponse.json({message : "Note Not Found"},{ status:404 })
-    //         }
-    return NextResponse.json({message : "Delete Succese"},{status:200})
+    const { ids} = await req.json()
+    // console.log("ID ที่จะลบ", ids)
+    await Note.deleteMany({ _id: { $in: ids } });
+    if(!ids || ids.length === 0){
+              return NextResponse.json({message : "Note Not Found"},{ status:404 })
+            }
+    
+     return new Response(JSON.stringify({ success: true }));
  } catch (error) {
     if(error){
       console.log("error" , error)

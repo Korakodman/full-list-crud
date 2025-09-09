@@ -108,12 +108,17 @@ const URLMONGODB = process.env.URLMONGODB
   async function headleDeleteSelected () {
      setloading(false)
     const idstoDelete = list.filter(item => item.color).map(item =>item._id)
-   if(idstoDelete.length === 0 ) return
-   const respone = await fetch (`/api/notelist/`,{
+   if(idstoDelete.length === 0 ){
+    alert("ไม่มีข้อมูลที่เลือก")
+    return
+   }
+    const respone = await fetch (`/api/notelist/`,{
     method :"DELETE",
     headers: {"Content-Type":"application/json"},
     body :  JSON.stringify({ids:idstoDelete})
    })
+  
+   
    
    if(respone.ok){
     setlist((prev)=>prev.filter((item)=>!idstoDelete.includes(item._id)))
@@ -277,7 +282,7 @@ if(input){
                     name="namelist"
                   />
                   <button
-                    className=" p-2 bg-amber-200 rounded-md ml-2"
+                    className=" p-2 bg-amber-200 rounded-md ml-2  hover:bg-amber-500"
                     type="submit"
                   >
                     Add
@@ -292,7 +297,7 @@ if(input){
                   
                 </div>
                 <div>
-                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-500 p-2 rounded-md  ml-2">DeleteSelect</button>
+                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 rounded-md hover:bg-red-600 transition duration-250 ml-2">DeleteSelect</button>
                 </div>
               </section>
             </div>
