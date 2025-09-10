@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
-
+import { EditOutlined ,DeleteOutlined} from "@ant-design/icons";
+import { Checkbox } from "antd"
 export default function Itemlist({
   list,
   handleoncheckbox,
@@ -18,14 +19,14 @@ export default function Itemlist({
               key={index +1}
               className={
                 item.color
-                  ? "bg-blue-400 flex justify-between  duration-200 items-center p-2"
+                  ? "bg-[#B45253] flex justify-between  duration-200 items-center p-2"
                   : "bg-gray-500 flex justify-between  duration-500 items-center p-2"
               }
             >
               <div className=" ml-2 flex  ">
                 <div className="mr-2 flex items-center">
-                  <input
-                    className=" w-4 h-4 rounded-md mr-2 checked:bg-amber-200"
+                  <Checkbox
+            
                     type="checkbox"
                     onChange={(e) => {
                       handleoncheckbox(e, item._id);
@@ -33,9 +34,9 @@ export default function Itemlist({
                     checked= {item.color || false}
                   />
 
-                  {index + 1}
+                  <div className="ml-2">{index + 1}</div>
                 </div>
-                <div key={item._id}>
+                <div key={item._id} >
                   <h1 style={{ backgroundColor: item.color }}>
                     {item.namelist}
                   </h1>
@@ -47,21 +48,21 @@ export default function Itemlist({
               <div className="p-2">
                 <button
                   type="button"
-                  className="p-2 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200"
+                  className="p-2 px-4 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200"
                   onClick={() => {
                     OpenDialog(false, item._id,item.namelist);
                   }}
                 >
-                  Edit
+                  <EditOutlined />
                 </button>
                 <button
                   type="button"
-                  className="p-2 mr-4 bg-red-300 rounded-md hover:bg-red-500 duration-200"
+                  className="p-2 px-4 mr-4 bg-red-300 rounded-md hover:bg-red-500 duration-200"
                   onClick={() => {
                     OpenDialog(true, item._id);
                   }}
                 >
-                  Delete
+                 <DeleteOutlined />
                 </button>
               </div>
             </div>

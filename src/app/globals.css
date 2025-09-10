@@ -12,10 +12,10 @@ li{
 }
 
 .btn-Delete{
-  @apply p-2 rounded-lg bg-red-300
+  @apply p-2 rounded-lg bg-red-300 duration-200 hover:bg-red-500
 }
 .btn-Edit{
-  @apply bg-blue-300 p-2 rounded-lg
+  @apply bg-blue-300 p-2 rounded-lg duration-200 hover:bg-blue-500
 }
 
 body {

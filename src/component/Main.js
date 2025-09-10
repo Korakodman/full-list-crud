@@ -3,7 +3,8 @@
 import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import Itemlist from "./Itemlist";
-import { Button, message, Space } from 'antd';
+import { Button, message, Space,Spin} from 'antd';
+import { LoadingOutlined, } from "@ant-design/icons";
 export default function Main() {
 const URLMONGODB = process.env.URLMONGODB
     // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
@@ -297,11 +298,11 @@ if(input){
                   
                 </div>
                 <div>
-                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 rounded-md hover:bg-red-600 transition duration-250 ml-2">DeleteSelect</button>
+                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 rounded-md hover:bg-red-600 transition duration-250 ml-2">Delete Select</button>
                 </div>
               </section>
             </div>
-            <div className=" text-yellow-300 text-2xl ">{loading  ? "" :"Loading" }</div>
+            <div className=" text-yellow-300 text-2xl text-center ">{loading  ? "" :"Loading"}</div>
             <div> 
               <Itemlist
                 list={list}
@@ -320,7 +321,7 @@ if(input){
           onClick={(e) => ClickOutside(e)}
         >
           <div>
-            <div>{OptionDiaglog ? "Do You Want To Delete?" : "Edit New"}</div>
+            <div className="mb-2">{OptionDiaglog ? "Do You Want To Delete?" : "Edit New"}</div>
             <div className="flex justify-between">
               <form onSubmit={(e) => FormDialog(e)}>
                  <div className="flex justify-between  w-[300px]">
@@ -333,9 +334,10 @@ if(input){
                 </button>
                  </div>
               </form>
-              <button onClick={CloseDialoig} className="bg-gray-300 p-2">
+              <button onClick={CloseDialoig} className="bg-gray-300 p-2 px-2 duration-200 hover:bg-gray-500 rounded-2xl">
                 Close
               </button>
+              
             </div>
           </div>
         </dialog>
