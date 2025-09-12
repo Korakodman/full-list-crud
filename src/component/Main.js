@@ -62,7 +62,7 @@ const URLMONGODB = process.env.URLMONGODB
         });
         // * เมื่อมีการกด submit จะเรียกใช้ api ส่งค่า inputvalue ไปยังฐานข้อมูล
      try {
-       await fetch(`/api/notelist`,{
+       await fetch(`${URLMONGODB}/api/notelist`,{
         method:"POST",
         headers:{
           "content-Type":"application/json",
@@ -113,7 +113,7 @@ const URLMONGODB = process.env.URLMONGODB
     alert("ไม่มีข้อมูลที่เลือก")
     return
    }
-    const respone = await fetch (`/api/notelist/`,{
+    const respone = await fetch (`${URLMONGODB}/api/notelist/`,{
     method :"DELETE",
     headers: {"Content-Type":"application/json"},
     body :  JSON.stringify({ids:idstoDelete})
@@ -135,7 +135,7 @@ const URLMONGODB = process.env.URLMONGODB
   async function DeleteOption  (_id) {
       setloading(true)
    try {
-     const respone = await fetch(`/api/notelist/${_id}`,{
+     const respone = await fetch(`${URLMONGODB}/api/notelist/${_id}`,{
         method:"DELETE",
       })
       if(respone.ok){
@@ -162,7 +162,7 @@ const URLMONGODB = process.env.URLMONGODB
   async function EditOption (_id)  {
        setloading(true)
     try {
-      const respone = await fetch(`/api/notelist/${_id}`,{
+      const respone = await fetch(`${URLMONGODB}/api/notelist/${_id}`,{
         method : "PUT",
         headers:{"Content-Type":"application/json"},body: JSON.stringify(SelectNote),
       })
