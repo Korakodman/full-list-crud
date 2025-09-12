@@ -269,11 +269,11 @@ if(input){
 }
 }
   return  ( 
-   <main className=" p-2 bg-gray-400 w-full h-[90vh]">
+   <main className=" p-2 bg-gray-400  w-full h-[90vh] ">
           <section className=" ">
             <div>
-              <h1 className="text-3xl">Code Note</h1>
-              <section className=" flex">
+              <h1 className="md:text-3xl text-xl">Code Note</h1>
+              <section className=" md:flex">
                 <form onSubmit={submitform}>
                   <input
                     className=" bg-white p-2 rounded-md "
@@ -292,14 +292,16 @@ if(input){
                     {erorr ? "ใส่ข้อมูลด้วยครับ" : ""}
                   </div>
                 </form>
-                <div>
-                  <input type="text" placeholder="Search" className="bg-white p-2 rounded-md ml-2" value={SearchInput}
+                <div className=" flex">
+                 <div> 
+                  <input type="text" placeholder="Search" className="bg-white p-2 rounded-md md:ml-2" value={SearchInput}
                   onChange={(e)=>handleonSearch(e)}/>
-                  
+                  </div>
+                  <div>
+                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 rounded-md hover:bg-red-600  ml-2">Delete Select</button>
                 </div>
-                <div>
-                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 rounded-md hover:bg-red-600 transition duration-250 ml-2">Delete Select</button>
                 </div>
+               
               </section>
             </div>
             <div className=" text-yellow-300 text-2xl text-center ">{loading  ? "" :"Loading"}</div>

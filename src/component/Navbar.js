@@ -3,9 +3,10 @@ import Header from "./Header";
 import Navigater from "./Navigater";
 export default function Navbar() {
   return (
-    <nav className="text-white bg-black p-6 flex justify-between items-center border-2  border-black">
+    <nav className="text-white bg-black md:p-6 p-2 flex justify-between items-center border-2  border-black">
       <Header namelogo="DevNote" />
       <Navigater First="Code" second="Test" third="Test" />
+      <div className="md:hidden">///</div>
     </nav>
   );
 }

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import { EditOutlined ,DeleteOutlined} from "@ant-design/icons";
-import { Checkbox } from "antd"
+import { Checkbox } from "antd";
 export default function Itemlist({
   list,
   handleoncheckbox,
@@ -9,6 +9,10 @@ export default function Itemlist({
   OpenDialog,
   setOptionDiaglog,
 }) {
+
+  const stylecheckbox ={
+   color: "#FFE797"
+  }
   return (
     <div>
       {" "}
@@ -26,14 +30,14 @@ export default function Itemlist({
               <div className=" ml-2 flex  ">
                 <div className="mr-2 flex items-center">
                   <Checkbox
-            
+              style={{ accentColor: "#FCB53B",  }}
                     type="checkbox"
                     onChange={(e) => {
                       handleoncheckbox(e, item._id);
                     }}
                     checked= {item.color || false}
                   />
-
+             
                   <div className="ml-2">{index + 1}</div>
                 </div>
                 <div key={item._id} >
