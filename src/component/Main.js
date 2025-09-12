@@ -7,6 +7,7 @@ import { Button, message, Space,Spin} from 'antd';
 import { LoadingOutlined, } from "@ant-design/icons";
 export default function Main() {
 const URLMONGODB = process.env.URLMONGODB
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
     // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
   
     const [list, setlist] = useState([]);
@@ -62,7 +63,7 @@ const URLMONGODB = process.env.URLMONGODB
         });
         // * เมื่อมีการกด submit จะเรียกใช้ api ส่งค่า inputvalue ไปยังฐานข้อมูล
      try {
-       await fetch(`${URLMONGODB}/api/notelist`,{
+       await fetch(`${NEXT_PUBLIC_API_URL}/api/notelist`,{
         method:"POST",
         headers:{
           "content-Type":"application/json",
@@ -113,7 +114,7 @@ const URLMONGODB = process.env.URLMONGODB
     alert("ไม่มีข้อมูลที่เลือก")
     return
    }
-    const respone = await fetch (`${URLMONGODB}/api/notelist/`,{
+    const respone = await fetch (`${NEXT_PUBLIC_API_URL}/api/notelist/`,{
     method :"DELETE",
     headers: {"Content-Type":"application/json"},
     body :  JSON.stringify({ids:idstoDelete})
@@ -135,7 +136,7 @@ const URLMONGODB = process.env.URLMONGODB
   async function DeleteOption  (_id) {
       setloading(true)
    try {
-     const respone = await fetch(`${URLMONGODB}/api/notelist/${_id}`,{
+     const respone = await fetch(`${NEXT_PUBLIC_API_URL}/api/notelist/${_id}`,{
         method:"DELETE",
       })
       if(respone.ok){
@@ -162,7 +163,7 @@ const URLMONGODB = process.env.URLMONGODB
   async function EditOption (_id)  {
        setloading(true)
     try {
-      const respone = await fetch(`${URLMONGODB}/api/notelist/${_id}`,{
+      const respone = await fetch(`${NEXT_PUBLIC_API_URL}/api/notelist/${_id}`,{
         method : "PUT",
         headers:{"Content-Type":"application/json"},body: JSON.stringify(SelectNote),
       })
