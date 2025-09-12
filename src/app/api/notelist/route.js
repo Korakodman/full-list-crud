@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import Note from "@/app/models/Note";
-// const corsHeaders = {
-//   "Access-Control-Allow-Origin": "*", // หรือใส่ URL ที่ต้องการอนุญาต
-//   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-//   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-// };
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*", // หรือใส่ URL ที่ต้องการอนุญาต
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+};
 
 export async function GET() {
   await connectDB()
     try {
       const note = await Note.find({})
-         return NextResponse.json(note,{ status: 200})
+         return NextResponse.json(note,{ status: 200, headers:corsHeaders})
     } catch (error) {
       return NextResponse.json(
         {error: error.message,},
@@ -27,7 +27,7 @@ export async function POST(req) {
     // console.log(body,"ได้ข้อมูล")
     const newNote = new Note(body)
     await newNote.save()
-    return NextResponse.json(newNote,{status:201})
+    return NextResponse.json(newNote,{status:201 , headers:corsHeaders})
    } catch (error) {
     console.error(error)
    }
@@ -41,14 +41,14 @@ export async function DELETE(req) {
     // console.log("ID ที่จะลบ", ids)
     await Note.deleteMany({ _id: { $in: ids } });
     if(!ids || ids.length === 0){
-              return NextResponse.json({message : "Note Not Found"},{ status:404 })
+              return NextResponse.json({message : "Note Not Found"},{ status:404  headers:corsHeaders})
             }
     
      return new Response(JSON.stringify({ success: true }));
  } catch (error) {
     if(error){
       console.log("error" , error)
-       return NextResponse.json({message : "Error "},{ status : 400})
+       return NextResponse.json({message : "Error "},{ status : 400  headers:corsHeaders})
     }
  }
 }
