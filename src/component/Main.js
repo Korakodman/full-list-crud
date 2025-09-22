@@ -6,8 +6,7 @@ import Itemlist from "./Itemlist";
 import { Button, message, Space,Spin} from 'antd';
 import { LoadingOutlined, } from "@ant-design/icons";
 export default function Main() {
-const URLMONGODB = process.env.URLMONGODB
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
+
     // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
   
     const [list, setlist] = useState([]);
@@ -32,6 +31,7 @@ const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
       try {
         setloading(true)
         Getdata()
+       
       } catch (error) {
         
       }
@@ -63,7 +63,7 @@ const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
         });
         // * เมื่อมีการกด submit จะเรียกใช้ api ส่งค่า inputvalue ไปยังฐานข้อมูล
      try {
-       await fetch(`${NEXT_PUBLIC_API_URL}/api/notelist`,{
+       await fetch(`/api/notelist`,{
         method:"POST",
         headers:{
           "content-Type":"application/json",
@@ -114,7 +114,7 @@ const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
     alert("ไม่มีข้อมูลที่เลือก")
     return
    }
-    const respone = await fetch (`${NEXT_PUBLIC_API_URL}/api/notelist/`,{
+    const respone = await fetch (`/api/notelist/`,{
     method :"DELETE",
     headers: {"Content-Type":"application/json"},
     body :  JSON.stringify({ids:idstoDelete})
@@ -136,7 +136,7 @@ const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
   async function DeleteOption  (_id) {
       setloading(true)
    try {
-     const respone = await fetch(`${NEXT_PUBLIC_API_URL}/api/notelist/${_id}`,{
+     const respone = await fetch(`/api/notelist/${_id}`,{
         method:"DELETE",
       })
       if(respone.ok){
@@ -163,7 +163,7 @@ const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL
   async function EditOption (_id)  {
        setloading(true)
     try {
-      const respone = await fetch(`${NEXT_PUBLIC_API_URL}/api/notelist/${_id}`,{
+      const respone = await fetch(`/api/notelist/${_id}`,{
         method : "PUT",
         headers:{"Content-Type":"application/json"},body: JSON.stringify(SelectNote),
       })

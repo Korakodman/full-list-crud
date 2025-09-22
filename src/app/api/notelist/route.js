@@ -8,7 +8,7 @@ const corsHeaders = {
 };
 
 export async function GET() {
-  await connectDB()
+  await connectDB(process.env.URLMONGODB)
     try {
       const note = await Note.find({})
          return NextResponse.json(note,{ status: 200, headers:corsHeaders})
@@ -21,7 +21,7 @@ export async function GET() {
  
 }
 export async function POST(req) {
-   await connectDB()
+   await connectDB(process.env.URLMONGODB)
    try {
     const body = await req.json();
     // console.log(body,"ได้ข้อมูล")
@@ -34,21 +34,21 @@ export async function POST(req) {
    
 }
 export async function DELETE(req) {
- await connectDB()
+ await connectDB(process.env.URLMONGODB)
  console.log("อันนี้ถูกเรียก")
  try {
     const { ids} = await req.json()
     // console.log("ID ที่จะลบ", ids)
     await Note.deleteMany({ _id: { $in: ids } });
     if(!ids || ids.length === 0){
-              return NextResponse.json({message : "Note Not Found"},{ status:404  headers:corsHeaders})
+              return NextResponse.json({message : "Note Not Found"},{ status:404  ,headers:corsHeaders })
             }
     
      return new Response(JSON.stringify({ success: true }));
  } catch (error) {
     if(error){
       console.log("error" , error)
-       return NextResponse.json({message : "Error "},{ status : 400  headers:corsHeaders})
+       return NextResponse.json({message : "Error "},{ status : 400 , headers:corsHeaders})
     }
  }
 }

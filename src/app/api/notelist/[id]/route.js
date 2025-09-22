@@ -11,7 +11,7 @@ const corsHeaders = {
 // -DELETE- //
 export async function DELETE(req,{params}) {
   // - เชื่อมต่อฐานข้อมูล - //
-    await connectDB()
+    await connectDB(process.env.URLMONGODB)
     try {
           // - รับพารามิเตอร์เข้าถึง id อาจจะใช้ consolg.log เรียกดูก่อนก็ได้ - //
        const id = await params.id
@@ -33,7 +33,7 @@ export async function DELETE(req,{params}) {
  }
  // -UPDATE NOTE- //
  export async function PUT(req,{params}) {
-  await connectDB()
+  await connectDB(process.env.URLMONGODB)
   try {
     const id = await params.id
     // -รับค่าที่ส่งมาจาก form หน้าบ้าน- //
