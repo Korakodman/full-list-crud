@@ -273,7 +273,6 @@ if(input){
    <main className=" p-2 bg-gray-400  w-full h-[90vh] ">
           <section className=" ">
             <div>
-              <h1 className="md:text-3xl text-xl">Code Note</h1>
               <section className=" md:flex">
                 <form onSubmit={submitform}>
                   <input
@@ -299,7 +298,7 @@ if(input){
                   onChange={(e)=>handleonSearch(e)}/>
                   </div>
                   <div>
-                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 rounded-md hover:bg-red-600  ml-2">Delete Select</button>
+                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 text-sm rounded-md duration-200 hover:bg-red-600  ml-2">Delete Select</button>
                 </div>
                 </div>
                
@@ -327,9 +326,9 @@ if(input){
             <div className="mb-2">{OptionDiaglog ? "Do You Want To Delete?" : "Edit New"}</div>
             <div className="flex justify-between">
               <form onSubmit={(e) => FormDialog(e)}>
-                 <div className="flex justify-between  w-[300px]">
+                 <div className="flex justify-between  md:w-[300px]">
                 {OptionDiaglog ? "" :   
-                <input onChange={(e) => handleonchangeDialog(e)} className=" bg-gray-300 p-2 rounded-xl 2" 
+                <input onChange={(e) => handleonchangeDialog(e)} className=" bg-gray-300 p-2 rounded-xl w-[150px] mr-2" 
                 value={SelectNote.namelist || ""}
                 name="namelist"/>}
                 <button className={OptionDiaglog ? "btn-Delete" : "btn-Edit"}>
@@ -345,7 +344,7 @@ if(input){
           </div>
         </dialog>
         </main>
-        
+
   );
     
   }
