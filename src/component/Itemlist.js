@@ -13,7 +13,7 @@ export default function Itemlist({
   return (
     <div>
       {" "}
-      <section className="grid grid-cols-1 gap-2 mt-2 ">
+      <section className="grid grid-cols-1 gap-2 mt-2 md:w-[680px] ">
         {list.map((item, index) => {
           return (
             <div
@@ -42,11 +42,11 @@ export default function Itemlist({
                     {item.namelist}
                   </h1>
                   <div className="">
-                    <p className=" text-[12px] text-black ">{item.time}</p>
+                    <p className=" text-[11px] text-black ">{item.time}</p>
                   </div>
                 </div>
               </div>
-              <div className="p-2 text-black">
+              <div className="p-2 text-black flex">
                 <button
                   type="button"
                   className="p-2 px-4 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200 "

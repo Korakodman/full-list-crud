@@ -76,9 +76,9 @@ export default function Main() {
 
       }
     )
-    
+  AddSuccess()
      setloading(false) 
-      setSearchInput("")
+  
     } catch (error) {
       console.log(error)
      }
@@ -131,6 +131,7 @@ return
    if(respone.ok){
     setlist((prev)=>prev.filter((item)=>!idstoDelete.includes(item._id)))
     setErrorSelected(false)
+      DeleteSelectSuccess()
    }
    }
 
@@ -208,6 +209,18 @@ return
       content: 'Edit Success',
     });
   }
+   const AddSuccess = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Add Note Success',
+    });
+  };
+const DeleteSelectSuccess = () => {
+    messageApi.open({
+      type: 'success',
+      content: 'Deleted NoteSelect Success',
+    });
+  };
     // * สร้าง Dialog ขึ้นมาและสร้างฟั่งชั้นการกระทำต่างๆของมันไม่ว่าจะ เปิด ปิด คลิกข้างนอกแล้วปิด
     const [OptionDiaglog, setOptionDiaglog] = useState();
     const [SelectNote, setSelectNote] = useState({});
@@ -276,11 +289,11 @@ if(value.trim()){
 }
 }
   return  ( 
-   <main className=" p-2 bg-[#1B3C53] w-full h-[90vh] ">
-          <section className=" ">
-            <div>
-              <section className=" md:flex">
-                <form onSubmit={submitform}>
+   <main className=" p-2  md:flex ">
+          <section className=" flex-row p-2 w-full ">
+            <div className=" md:justify-center p-2 ">
+              <section className=" md:flex md:justify-center ">
+                <form onSubmit={submitform} className=" ">
                   <input
                     className=" bg-white p-2 rounded-md "
                     placeholder="Add Text"
@@ -292,7 +305,7 @@ if(value.trim()){
                     className=" p-2 bg-amber-200 rounded-md ml-2  hover:bg-amber-500"
                     type="submit"
                   >
-                    Add
+                    Submit
                   </button>
                   <div className="text-red-500 mt-2">
                     {erorr ? "ใส่ข้อมูลด้วยครับ" : ""}
@@ -302,13 +315,13 @@ if(value.trim()){
                  <div> 
                   <input type="text" placeholder="Search" className="bg-white p-2 rounded-md md:ml-2"
                   onChange={(e)=>handleonSearch(e)}/>
-                   <div className=" text-red-500 mt-2">
+                   <div className=" text-red-500 mt-2 ml-2">
                     {ErrorSelected ? "ไม่มีข้อมูลที่เลือกไว้" : ""}
                   </div>
                   </div>
                  
                   <div className="">
-                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 text-sm rounded-md duration-200 hover:bg-red-600  ml-2">Delete Select</button>
+                  <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 text-sm rounded-md duration-200 hover:bg-red-600  ml-2">Delete Chose</button>
               <div className="text-red-500 mt-2">
                   </div>
                 </div>
@@ -317,7 +330,7 @@ if(value.trim()){
               </section>
             </div>
             <div className=" text-yellow-300 text-2xl text-center ">{loading  ? "" :"Loading"}</div>
-            <div> 
+            <div className=" flex justify-center"> 
               <Itemlist
                 list={list}
                 handleoncheckbox={handleoncheckbox}
