@@ -10,21 +10,18 @@ export default function Itemlist({
   setOptionDiaglog,
 }) {
 
-  const stylecheckbox ={
-   color: "#FFE797"
-  }
   return (
     <div>
       {" "}
-      <section className="grid grid-cols-1 gap-2 mt-2">
+      <section className="grid grid-cols-1 gap-2 mt-2 ">
         {list.map((item, index) => {
           return (
             <div
-              key={index +1}
+              key={index +1} 
               className={
                 item.color
-                  ? "bg-[#B45253] flex justify-between  duration-200 items-center p-2"
-                  : "bg-gray-500 flex justify-between  duration-500 items-center p-2"
+                  ? "bg-[#B45253]  border-2 border-[#D2C1B6] flex justify-between  duration-200 items-center p-2 transition-shadow hover:shadow-md hover:shadow-[#D2C1B6] text-[#D2C1B6] "
+                  : " bg-[#456882] border-2 border-[#D2C1B6] flex justify-between  duration-200 items-center p-2 transition-shadow hover:shadow-md hover:shadow-[#D2C1B6] text-[#D2C1B6] "
               }
             >
               <div className=" ml-2 flex  ">
@@ -38,21 +35,21 @@ export default function Itemlist({
                     checked= {item.color || false}
                   />
              
-                  <div className="ml-2">{index + 1}</div>
+                  <div className="ml-2 text-black">{index + 1}.</div>
                 </div>
                 <div key={item._id} >
                   <h1 style={{ backgroundColor: item.color }}>
                     {item.namelist}
                   </h1>
                   <div className="">
-                    <p className=" text-[12px] text-white ">{item.time}</p>
+                    <p className=" text-[12px] text-black ">{item.time}</p>
                   </div>
                 </div>
               </div>
-              <div className="p-2">
+              <div className="p-2 text-black">
                 <button
                   type="button"
-                  className="p-2 px-4 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200"
+                  className="p-2 px-4 mr-4 bg-blue-300 rounded-md hover:bg-blue-500 duration-200 "
                   onClick={() => {
                     OpenDialog(false, item._id,item.namelist);
                   }}

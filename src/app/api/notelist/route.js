@@ -7,9 +7,12 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
 };
 
+// - API GET - // 
+// - ดึงข้อมูลทั้งหมดในฐานข้อมูล - //
 export async function GET() {
   await connectDB(process.env.URLMONGODB)
     try {
+      // - รอ database ส่งข้อมูลกลับมา - //
       const note = await Note.find({})
          return NextResponse.json(note,{ status: 200, headers:corsHeaders})
     } catch (error) {
@@ -20,8 +23,12 @@ export async function GET() {
     }
  
 }
+// - API POST - //
+// - สร้างข้อมูลใหม่ของ Note - //
 export async function POST(req) {
+   // - เชื่อมต่อฐานข้อมูลโดยส่ง env ไปตรงๆ - //
    await connectDB(process.env.URLMONGODB)
+
    try {
     const body = await req.json();
     // console.log(body,"ได้ข้อมูล")
@@ -33,9 +40,10 @@ export async function POST(req) {
    }
    
 }
+// - API DELETE - //
+// - ลบข้อมูลตามที่ req ส่งมาจาก body(form api) โดยรับข้อมูลมาเป็น id - //
 export async function DELETE(req) {
  await connectDB(process.env.URLMONGODB)
- console.log("อันนี้ถูกเรียก")
  try {
     const { ids} = await req.json()
     // console.log("ID ที่จะลบ", ids)

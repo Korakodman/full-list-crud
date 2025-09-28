@@ -10,7 +10,7 @@ const corsHeaders = {
 
 // -DELETE- //
 export async function DELETE(req,{params}) {
-  // - เชื่อมต่อฐานข้อมูล - //
+    // - เชื่อมต่อฐานข้อมูลโดยส่ง env ไปตรงๆ - //
     await connectDB(process.env.URLMONGODB)
     try {
           // - รับพารามิเตอร์เข้าถึง id อาจจะใช้ consolg.log เรียกดูก่อนก็ได้ - //
@@ -22,8 +22,10 @@ export async function DELETE(req,{params}) {
         if(!deletedUser){
           return NextResponse.json({message : "Note Not Found"},{ status:404 ,headers:corsHeaders })
         }
+
       return NextResponse.json({message : "Delete Succese"},{status:200,headers:corsHeaders})
     } catch (error) {
+
         if(error){
           console.error("error",error)
           return NextResponse.json({message : "Error "},{ status : 400,headers:corsHeaders})
@@ -32,14 +34,19 @@ export async function DELETE(req,{params}) {
     }
  }
  // -UPDATE NOTE- //
+
  export async function PUT(req,{params}) {
   await connectDB(process.env.URLMONGODB)
   try {
     const id = await params.id
+
     // -รับค่าที่ส่งมาจาก form หน้าบ้าน- //
+
     const body = await req.json()
+
     // -ใช้ log ดูข้อมูลก่อนเพื่อเช็คค่า- //
   //  console.log("ข้อมูลที่จะอัพเดตคือ " , body)
+
    if(!body){
           return NextResponse.json({message : "Note Not Found"},{ status:404 ,headers:corsHeaders })
         }

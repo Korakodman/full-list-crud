@@ -10,13 +10,17 @@ export default function Main() {
     // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
   
     const [list, setlist] = useState([]);
-    const [originalList,SetoriginalList] = useState([])
+    const [originalList,setoriginalList] = useState([])
     const [erorr, setErorr] = useState(false);
+    const [ErrorSelected, setErrorSelected] = useState(false)
     const [loading,setloading] = useState(false)
     async function Getdata(params) {
        await fetch(`/api/notelist`)
          .then((res)=> res.json())
-         .then((data)=>setlist(data))
+         .then((data)=>{setlist(data)
+          >setoriginalList(data)
+         })
+      
     }
 // *เป็น state ไว้เก็บการเคลื่อนไวของ input ต้องสร้าง name:value ไว้ด้วยไม่งั้นมันจะหาไม่เจอว่าจะแสดงเป็นอะไร
     // ! เมื่อ มันหาไม่เจอจะขึ้นใน input หรือ console [object Object] แก้โดยใส่ ชื่อ state ของ object ตามด้วย เข้าถึงค่าภายในของมั้น เช่น
@@ -55,7 +59,7 @@ export default function Main() {
       if (inputvalue.namelist) {
         e.preventDefault();
         setlist((prev) => [...prev, inputvalue]);
-        SetoriginalList((prev) => [...prev, inputvalue])
+        setoriginalList((prev) => [...prev, inputvalue])
         setinputvalue({
           namelist: "",
           time: new Date().toLocaleString(),
@@ -72,7 +76,9 @@ export default function Main() {
 
       }
     )
+    
      setloading(false) 
+      setSearchInput("")
     } catch (error) {
       console.log(error)
      }
@@ -108,11 +114,11 @@ export default function Main() {
     };
     
   async function headleDeleteSelected () {
-     setloading(false)
     const idstoDelete = list.filter(item => item.color).map(item =>item._id)
    if(idstoDelete.length === 0 ){
-    alert("ไม่มีข้อมูลที่เลือก")
-    return
+    setErrorSelected(true)
+  setloading(true);
+return 
    }
     const respone = await fetch (`/api/notelist/`,{
     method :"DELETE",
@@ -124,7 +130,7 @@ export default function Main() {
    
    if(respone.ok){
     setlist((prev)=>prev.filter((item)=>!idstoDelete.includes(item._id)))
-   
+    setErrorSelected(false)
    }
    }
 
@@ -141,7 +147,7 @@ export default function Main() {
       })
       if(respone.ok){
      setlist((prev)=> prev.filter((note)=> note._id !== _id))
-     SetoriginalList((prev)=> prev.filter((notepast)=>notepast._id !== _id))
+     setoriginalList((prev)=> prev.filter((notepast)=>notepast._id !== _id))
       }
     
      } catch (error) {
@@ -179,7 +185,7 @@ export default function Main() {
           return item
         })
         setlist(updateList)
-        SetoriginalList(updateList)
+        setoriginalList(updateList)
         Editsuccess()
       }
     } catch (error) {
@@ -255,22 +261,22 @@ const handleonchangeDialog = (e) =>{
       setSelectNote((prev) => ({ ...prev, namelist: e.target.value }));
     }
 
-const [SearchInput, setSearchInput] = useState("")
 const handleonSearch = (e) =>{
-  const input = e.target.value
-   setSearchInput(input)
-if(input){
-   const updateList = list.filter(item=>
-    item.namelist.toLowerCase().includes(SearchInput.toLowerCase())
+  const value = e.target.value
+if(value.trim()){
+   const updateList = originalList.filter(item=>
+    (item.namelist || "").toLowerCase().includes(value.toLowerCase())
    )  
    setlist(updateList)
-  
+
+ 
 }else{
- setlist(originalList)
+  setlist(originalList)
+
 }
 }
   return  ( 
-   <main className=" p-2 bg-gray-400  w-full h-[90vh] ">
+   <main className=" p-2 bg-[#1B3C53] w-full h-[90vh] ">
           <section className=" ">
             <div>
               <section className=" md:flex">
@@ -294,11 +300,17 @@ if(input){
                 </form>
                 <div className=" flex">
                  <div> 
-                  <input type="text" placeholder="Search" className="bg-white p-2 rounded-md md:ml-2" value={SearchInput}
+                  <input type="text" placeholder="Search" className="bg-white p-2 rounded-md md:ml-2"
                   onChange={(e)=>handleonSearch(e)}/>
+                   <div className=" text-red-500 mt-2">
+                    {ErrorSelected ? "ไม่มีข้อมูลที่เลือกไว้" : ""}
                   </div>
-                  <div>
+                  </div>
+                 
+                  <div className="">
                   <button onClick={headleDeleteSelected} type="btn" className=" bg-red-400 p-2 text-sm rounded-md duration-200 hover:bg-red-600  ml-2">Delete Select</button>
+              <div className="text-red-500 mt-2">
+                  </div>
                 </div>
                 </div>
                
