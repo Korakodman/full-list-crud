@@ -5,11 +5,11 @@ import { useState } from "react";
 import Itemlist from "./Itemlist";
 import { Button, message, Space,Spin} from 'antd';
 import { LoadingOutlined, } from "@ant-design/icons";
+import { useListState } from '@/list/useListState'
 export default function Main() {
 
     // *  สร้าง list มาเป็นที่เก็บข้อมูล ไว้โหลดจาก database หรือ mockup(จำลองนั้นเอง) */
-  
-    const [list, setlist] = useState([]);
+   const {lists,addlist,deletelist,setlist,idstoDelete} = useListState()
     const [originalList,setoriginalList] = useState([])
     const [erorr, setErorr] = useState(false);
     const [ErrorSelected, setErrorSelected] = useState(false)
@@ -58,7 +58,7 @@ export default function Main() {
     async function submitform  (e)  {
       if (inputvalue.namelist) {
         e.preventDefault();
-        setlist((prev) => [...prev, inputvalue]);
+        addlist(inputvalue)
         setoriginalList((prev) => [...prev, inputvalue])
         setinputvalue({
           namelist: "",
@@ -100,7 +100,7 @@ export default function Main() {
     // * โดยเข้าถึง color ถ้า checkend เป็นจริงให้เปลี่ยนตามค่า ถ้า checked ? "จริง" : "ไม่จริง"
     const handleoncheckbox = (e, _id) => {
       const checked = e.target.checked;
-      const updatedList = list.map((item) => {
+      const updatedList = lists.map((item) => {
         if (item._id === _id) {
           return {
             ...item,
@@ -114,7 +114,7 @@ export default function Main() {
     };
     
   async function headleDeleteSelected () {
-    const idstoDelete = list.filter(item => item.color).map(item =>item._id)
+  const idstoDelete = lists.filter(item => item.color).map(item =>item._id)
    if(idstoDelete.length === 0 ){
     setErrorSelected(true)
   setloading(true);
@@ -129,7 +129,7 @@ return
    
    
    if(respone.ok){
-    setlist((prev)=>prev.filter((item)=>!idstoDelete.includes(item._id)))
+    Getdata()
     setErrorSelected(false)
       DeleteSelectSuccess()
    }
@@ -147,7 +147,7 @@ return
         method:"DELETE",
       })
       if(respone.ok){
-     setlist((prev)=> prev.filter((note)=> note._id !== _id))
+      Getdata()
      setoriginalList((prev)=> prev.filter((notepast)=>notepast._id !== _id))
       }
     
@@ -175,7 +175,7 @@ return
         headers:{"Content-Type":"application/json"},body: JSON.stringify(SelectNote),
       })
       if(respone.ok){
-         const updateList = list.map((item) => {
+         const updateList = lists.map((item) => {
           if(item._id === _id){
             return{
               ...item,
@@ -302,10 +302,10 @@ if(value.trim()){
                     name="namelist"
                   />
                   <button
-                    className=" p-2 bg-amber-200 rounded-md ml-2  hover:bg-amber-500"
+                    className=" px-4 py-2 font-bold bg-amber-200 rounded-md ml-2  hover:bg-amber-500"
                     type="submit"
                   >
-                    Submit
+                    +
                   </button>
                   <div className="text-red-500 mt-2">
                     {erorr ? "ใส่ข้อมูลด้วยครับ" : ""}
@@ -332,10 +332,8 @@ if(value.trim()){
             <div className=" text-yellow-300 text-2xl text-center ">{loading  ? "" :"Loading"}</div>
             <div className=" flex justify-center"> 
               <Itemlist
-                list={list}
                 handleoncheckbox={handleoncheckbox}
-                DeleteOption={DeleteOption}
-                EditOption={EditOption}
+            
                 OpenDialog={OpenDialog}
                 setOptionDiaglog={setOptionDiaglog}
               /></div>

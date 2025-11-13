@@ -1,20 +1,17 @@
 import React, { useRef } from "react";
 import { EditOutlined ,DeleteOutlined} from "@ant-design/icons";
 import { Checkbox } from "antd";
+import { useListState } from '@/list/useListState'
 export default function Itemlist({
-  list,
   handleoncheckbox,
-  DeleteOption,
-  EditOption,
   OpenDialog,
-  setOptionDiaglog,
 }) {
-
-  return (
+ const {lists}  = useListState()
+return (
     <div>
       {" "}
       <section className="grid grid-cols-1 gap-2 mt-2 md:w-[680px] ">
-        {list.map((item, index) => {
+        {lists.map((item, index) => {
           return (
             <div
               key={index +1} 

@@ -14,7 +14,7 @@ export async function DELETE(req,{params}) {
     await connectDB(process.env.URLMONGODB)
     try {
           // - รับพารามิเตอร์เข้าถึง id อาจจะใช้ consolg.log เรียกดูก่อนก็ได้ - //
-       const id = await params.id
+      const {id} = await params
         //  console.log("params id =>", params.id)
 
         const deletedUser = await Note.findByIdAndDelete(new ObjectId(id));
@@ -38,7 +38,7 @@ export async function DELETE(req,{params}) {
  export async function PUT(req,{params}) {
   await connectDB(process.env.URLMONGODB)
   try {
-    const id = await params.id
+    const {id} = await params
 
     // -รับค่าที่ส่งมาจาก form หน้าบ้าน- //
 
